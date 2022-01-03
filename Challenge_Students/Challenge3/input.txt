@@ -1,0 +1,5 @@
+figure,var1,var2,var3
+
+Triangle,10,12,12
+Rectangle,10,11
+Circle,10

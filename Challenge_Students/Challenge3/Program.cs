@@ -1,3 +1,8 @@
+using System;
+using System.IO; 
+using System.Text.RegularExpressions;
+using System.Globalization;
+
 class App
 {
     static void Main(string[] args)
@@ -21,6 +26,8 @@ class App
         circle.CalculateArea());
         Console.WriteLine("The perimeter of the circle is equal to {0}",
         circle.CalculatePerimeter());
+
+        Console.ReadKey();
     }
 }
 abstract class Shape
@@ -48,31 +55,49 @@ class Square : Shape
         double perimeter = ((this.side1+this.side2)*2);
         return perimeter;
     }
-    public override void GetSides()
-    {
-        string pattern = @"^[Ss]quare,-?\d+(?:\.\d+)?";
-        Regex rg = new Regex(pattern);
-        NumberFormatInfo provider = new NumberFormatInfo();
-        provider.NumberDecimalSeparator = ".";
-        try {
-            using (StreamReader sr = new StreamReader("input.txt"));
-            string line;
-            while ((line = sr.ReadLine()) !=null) 
-            {
-                if(Regex.Match(line , pattern).Success)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-        } 
-        catch 
+        public override double GetSides()
         {
-            string [] sides = Regex.Split(line, @"(^[Ss]quare),([\d]+)");
-            this.radius = double.Parse(sides[2],
-            System.Globalization.CultureInfo.InvariantCulture);
+            double readoutput=0;
+            string pattern = @"^[Rr]ectangle,",
+            Regex rg = new Regex(pattern);
+            //creating an object of NumberFormatInfo
+            NumberFormatInfo provider = new NumberFormatInfo();
+            provider.NumberDecimalSeparator = ".";
+            try {
+                // Create an instance of StreamReader to read from a file.
+                // The using statement also closes the StreamReader.
+                using (StreamReader sr = new StreamReader("input.txt")) {
+                    string line;
+                // Read and display lines from the file until 
+                // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != empty) {
+                        if(Regex.Match(line , pattern).Success){
+                            Console.WriteLine(line);
+                            try
+                            {
+                                //try for variables with floating points
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+\.[\d]+),([\d]+\.[\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            catch
+                            {
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+),([\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                        }                    
+                    }
+                }
+            } 
+            catch (Exception e) 
+            {
+                // Let the user know what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+            return readoutput;  
         }
-        
-    }
 }
 class Triangle : Shape
 {
@@ -96,31 +121,49 @@ class Triangle : Shape
         double perimeter = this.tside1+this.tside2+this.tside3;
         return perimeter;
     }
-    public override void GetSides()
-    {
-        string pattern = @"^[Tt]riangle,-?\d+(?:\.\d+)?";
-        Regex rg = new Regex(pattern);
-        NumberFormatInfo provider = new NumberFormatInfo();
-        provider.NumberDecimalSeparator = ".";
-        try {
-            using (StreamReader sr = new StreamReader("input.txt"));
-            string line;
-            while ((line = sr.ReadLine()) !=null) 
-            {
-                if(Regex.Match(line , pattern).Success)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-        } 
-        catch 
+            public override double GetSides()
         {
-            string [] sides = Regex.Split(line, @"(^[Tt]riangle),([\d]+)");
-            this.radius = double.Parse(sides[2],
-            System.Globalization.CultureInfo.InvariantCulture);
+            double readoutput=0;
+            string pattern = @"^[Rr]ectangle,",
+            Regex rg = new Regex(pattern);
+            //creating an object of NumberFormatInfo
+            NumberFormatInfo provider = new NumberFormatInfo();
+            provider.NumberDecimalSeparator = ".";
+            try {
+                // Create an instance of StreamReader to read from a file.
+                // The using statement also closes the StreamReader.
+                using (StreamReader sr = new StreamReader("input.txt")) {
+                    string line;
+                // Read and display lines from the file until 
+                // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != empty) {
+                        if(Regex.Match(line , pattern).Success){
+                            Console.WriteLine(line);
+                            try
+                            {
+                                //try for variables with floating points
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+\.[\d]+),([\d]+\.[\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            catch
+                            {
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+),([\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                        }                    
+                    }
+                }
+            } 
+            catch (Exception e) 
+            {
+                // Let the user know what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+            return readoutput;  
         }
-        
-    }
 }
 
 class Circle : Shape 
@@ -141,29 +184,47 @@ class Circle : Shape
         double perimeter = Math.PI*2*this.radius;
         return perimeter;
     }
-    public override void GetSides()
-    {
-        string pattern = @"^[Cc]ircle,-?\d+(?:\.\d+)?";
-        Regex rg = new Regex(pattern);
-        NumberFormatInfo provider = new NumberFormatInfo();
-        provider.NumberDecimalSeparator = ".";
-        try {
-            using (StreamReader sr = new StreamReader("input.txt"));
-            string line;
-            while ((line = sr.ReadLine()) !=null) 
-            {
-                if(Regex.Match(line , pattern).Success)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-        } 
-        catch 
+          public override double GetSides()
         {
-            string [] sides = Regex.Split(line, @"(^[Cc]ircle),([\d]+)");
-            this.radius = double.Parse(sides[2],
-            System.Globalization.CultureInfo.InvariantCulture);
+            double readoutput=0;
+            string pattern = @"^[Rr]ectangle,",
+            Regex rg = new Regex(pattern);
+            //creating an object of NumberFormatInfo
+            NumberFormatInfo provider = new NumberFormatInfo();
+            provider.NumberDecimalSeparator = ".";
+            try {
+                // Create an instance of StreamReader to read from a file.
+                // The using statement also closes the StreamReader.
+                using (StreamReader sr = new StreamReader("input.txt")) {
+                    string line;
+                // Read and display lines from the file until 
+                // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != empty) {
+                        if(Regex.Match(line , pattern).Success){
+                            Console.WriteLine(line);
+                            try
+                            {
+                                //try for variables with floating points
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+\.[\d]+),([\d]+\.[\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                            catch
+                            {
+                                string [] sides = Regex.Split(line, @"(^[rR]ectangle),([\d]+),([\d]+)");
+                                this.side1 = Double.Parse(sides[2], System.Globalization.CultureInfo.InvariantCulture);   
+                                this.side2 = Double.Parse(sides[3], System.Globalization.CultureInfo.InvariantCulture);
+                            }
+                        }                    
+                    }
+                }
+            } 
+            catch (Exception e) 
+            {
+                // Let the user know what went wrong.
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+            return readoutput;  
         }
-        
-    }
 }
